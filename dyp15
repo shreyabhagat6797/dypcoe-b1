@@ -79,7 +79,10 @@ smallest_value(number_stack)
 print("after the change")
 number_stack.display()
 
+•	Queue : 
+A queue is also a linear data structure which is based on the principle of First-In-First-Out (FIFO) where the data entered first will be accessed first.
 
+#basic code
 class Queue:
     def __init__(self,max_size):
         self.__max_size=max_size
