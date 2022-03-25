@@ -1,0 +1,198 @@
+#linked list
+class Node:
+    def __init__(self,data):
+        self.data=data
+        self.next=None
+
+    def set_data(self,data):
+        self.data=data
+
+    def set_next(self,next):
+        self.next=next
+
+    def get_data(self):
+        return self.data
+
+    def get_next(self):
+        return self.next
+
+class LinkedList:
+    def __init__(self):
+        self.head=None
+        self.tail=None
+
+    def get_head(self):
+        return self.head
+
+    def get_tail(self):
+        return self.tail
+
+    def insert_at_end(self,data):
+        new_node=Node(data)    #create new node
+        if self.head is None:   #if empty
+            self.head=self.tail=new_node    #set new node as head and tail
+            return "element added successfully:"+str(self.tail.get_data())
+        else:   #if not empty
+            self.tail.set_next(new_node) #set tail next to new node
+            self.tail=new_node     #set new node as tail
+            return "element added successfully:"+str(self.tail.get_data())
+
+    def insert_in_between(self,data,data_before):
+        new_node=Node(data)
+        if data_before==None:    #if data before is empty
+            new_node.set_next(self.head)     #set head as next node to new node
+            self.head=new_node     #make new node as head
+            if new_node.get_next()==None:    #check if next wasn't empty
+                self.tail=new_node        #if empty then make new node as tail node
+        else:    #if data before is specified
+            node_before=self.find_node(data_before)    #find data before node
+            if node_before is not None:   #found and is not empty
+                new_node.set_next(node_before.get_next()) #set next of new node to the next of node before
+                node_before.set_next(new_node)   #set the next of node before to the new node
+            else:
+                print(data_before," is no present in linked list")
+
+
+    def insert_at_beginning(self,data):
+        new_node=Node(data)
+        new_node.set_next(self.head)
+        self.head=new_node
+        return "data inserted"
+
+    def find_node(self,data):
+        temp=self.head
+        while temp is not None:
+            if temp.get_data()==data:
+                return temp
+            temp=temp.get_next()
+        return None
+            
+    def delete(self,data):
+        node=self.find_node(data)     # to find the data to be deleted
+        if node is not None:      #if data found
+            if node==self.head:  #if node to be deleted is head node
+                if self.head==self.tail:  #if nodee to deleted is head and tail also
+                    self.tail=None
+                self.head=node.get_next()
+            else:
+                temp=self.head
+                while temp is not None:
+                    if temp.get_next()==node:    #if next element is our data to be deleted
+                        temp.set_next(node.get_next())     #set next of priot element 
+                        if node==self.tail:   # if element deleted is tail node also
+                            self.tail=temp   #then set prreevous ellement as tail
+                        node.set_next(None)   #set node's next to None
+                        break
+                    temp=temp.get_next()    # to travel till the element is found
+            print("element deleted successfully")
+        else:
+            print(data," is not present in linked list")
+
+    def display(self):
+        temp=self.head
+        while temp is not None:
+            print(temp.get_data())
+            temp=temp.get_next()
+
+
+if __name__=="__main__":
+    mylist=LinkedList()
+    while True:
+        print("Select the option")
+        print("1)Add at end;","2)Add at beginning;","3)Add in between;","4)delete;","5)find node;","6)display;")
+        do=int(input("enter your choice:"))
+        if do==1:
+            data=int(input("enter the element to added:"))
+            result=mylist.insert_at_end(data)
+            print(result)
+
+        elif do==2:
+            data=int(input("enter the element to be inserted:"))
+            mylist.insert_at_beginning(data)
+
+        elif do==3:
+            data=int(input("enter the element to be inserted:"))
+            data_before=int(input("enter the element before:"))
+            result=mylist.insert_in_between(data,data_before)
+            print(result)
+            
+        elif do==4:
+            data=int(input("enter the element to be inserted:"))
+            mylist.delete(data)
+
+        elif do==5:
+            data=int(input("enter the element to be inserted:"))
+            result=mylist.find_node(data)
+            if result is not None:
+                print(result)
+            else:
+                print("data not found")
+
+        elif do==6:
+            mylist.display()
+
+        else:
+            print("wrong selection")
+
+        
+'''
+FoodCorner home delivers vegetarian and non-vegetarian combos to its customer based on order.
+A vegetarian combo costs Rs.120 per plate and a non-vegetarian combo costs Rs.150 per plate.
+Their non-veg combo is really famous that they get more orders for their non-vegetarian combo than the vegetarian combo.
+Apart from the cost per plate of food, customers are also charged for home delivery 
+based on the distance in kms from the restaurant to the delivery point. The delivery charges are as mentioned below:
+
+Distance in kms          Delivery charge in Rs per km
+
+For first 3kms                      0
+
+For next 3kms                       3
+
+For the remaining                   6
+
+Given the type of food, quantity (no. of plates) and the distance in kms from the restaurant to the delivery point, 
+write a python program to calculate the final bill amount to be paid by a customer. 
+The below information must be used to check the validity of the data provided by the customer: 
+Type of food must be ‘V’ for vegetarian and ‘N’ for non-vegetarian.
+Distance in kms must be greater than 0.
+Quantity ordered should be minimum 1.
+If any of the input is invalid, the bill amount should be considered as -1.
+'''
+
+def bill(food_type,quantity,distance):
+    bill_amount=0
+    deliver_charge=0
+    if food_type=="V" or food_type=="N":
+        if quantity>=1 and distance>0:
+            if food_type=="V":
+                 bill_amount=quantity*120
+            elif food_type=="N":
+                bill_amount=quantity*150
+            if distance>3 and distance<=6:
+                deliver_charge=deliver_charge+(distance-3)*3
+            elif distance>6:
+                deliver_charge=deliver_charge+(distance-6)*6+9
+            bill_amount=bill_amount+deliver_charge
+            print(bill_amount) 
+        else:
+            print(-1)
+    else:
+        print(-1)
+
+bill("N",1,4)
+
+
+'''
+A teacher is conducting a camp for a group of five children. 
+Based on their performance and behavior during the camp, the teacher rewards them with chocolates.
+
+Write a Python function to
+1. Find the total number of chocolates received by all the children put together.
+Assume that each child is identified by an id and it is stored in a tuple and the number of chocolates given to each child is stored in a list.
+2. The teacher also rewards a child with few extra chocolates for his/her best conduct during the camp.
+•	If the number of extra chocolates is less than 1, an error message "Extra chocolates is less than 1", should be displayed.
+•	If the given child Id is invalid, an error message "Child id is invalid" should be displayed. Otherwise, t
+he extra chocolates provided for the child must be added to his/her existing number of chocolates and 
+display the list containing the total number of chocolates received by each child.
+
+'''
